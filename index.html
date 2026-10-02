@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071018">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>DaFragu Travel Studio v1.3</title>
+<style>
+:root{
+  --bg:#071018;--panel:#0d1823;--panel2:#122331;--text:#f5fbff;--muted:#91a8b9;
+  --cyan:#44e7ff;--green:#67ffb1;--violet:#ca8cff;--orange:#ffb65f;--red:#ff7185;
+  --yellow:#ffe66d;--pink:#ff7bd8;--blue:#6ea8ff;
+  --border:rgba(130,220,255,.18)
+}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 Inter,system-ui,Segoe UI,Arial;background:
+radial-gradient(circle at 78% -10%,rgba(68,231,255,.17),transparent 28%),
+radial-gradient(circle at 10% 10%,rgba(255,123,216,.10),transparent 24%),
+radial-gradient(circle at 50% 120%,rgba(255,182,95,.08),transparent 28%),var(--bg);color:var(--text)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.7),transparent 70%)}
+button,input,select,textarea{font:inherit}.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+aside{padding:22px 14px;border-right:1px solid rgba(100,220,255,.14);background:
+linear-gradient(180deg,rgba(8,16,24,.98),rgba(5,11,17,.98));position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-weight:950;font-size:20px;letter-spacing:.2px}.brand span{background:linear-gradient(90deg,var(--cyan),var(--pink),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:10px;letter-spacing:1.9px;color:#6f8798;margin:4px 0 22px}
+.nav{display:grid;gap:5px}
+.nav button{width:100%;border:1px solid transparent;background:transparent;color:#b4c9d8;text-align:left;padding:11px 12px;border-radius:13px;cursor:pointer;transition:.18s ease;position:relative}
+.nav button:hover{transform:translateX(3px);background:rgba(255,255,255,.035);color:white;border-color:rgba(255,255,255,.05)}
+.nav button.active{background:linear-gradient(90deg,rgba(68,231,255,.16),rgba(202,140,255,.07));color:white;border-color:rgba(68,231,255,.28);box-shadow:0 0 0 1px rgba(68,231,255,.03),inset 3px 0 var(--cyan),0 8px 24px rgba(0,0,0,.14)}
+.nav button:nth-child(3n+1).active{box-shadow:inset 3px 0 var(--cyan),0 8px 24px rgba(0,0,0,.14)}
+.nav button:nth-child(3n+2).active{box-shadow:inset 3px 0 var(--pink),0 8px 24px rgba(0,0,0,.14)}
+.nav button:nth-child(3n).active{box-shadow:inset 3px 0 var(--orange),0 8px 24px rgba(0,0,0,.14)}
+.credit{color:#415463;font-size:10px;margin:28px 10px 10px}main{padding:25px 28px 60px;max-width:1500px;width:100%;margin:auto}
+.section{display:none}.section.active{display:block}.top,.sectionhead{display:flex;justify-content:space-between;gap:15px;align-items:center}
+.sectionhead{margin:24px 0 12px}.eyebrow{font-size:10px;color:var(--cyan);font-weight:900;letter-spacing:1.6px}
+h1{font-size:29px;margin:4px 0}h2{margin:0;font-size:20px}.muted{color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:linear-gradient(180deg,#132230,#0d1822);color:white;padding:9px 12px;border-radius:11px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.12);transition:.18s ease}
+.btn:hover{transform:translateY(-1px);border-color:rgba(68,231,255,.38)}
+.btn.primary{background:linear-gradient(90deg,var(--cyan),#68f0d0);color:#001116;font-weight:950;border:0;box-shadow:0 8px 24px rgba(68,231,255,.16)}
+.btn.danger{border-color:rgba(255,113,133,.35);color:#ffb0bb}
+.card{background:linear-gradient(145deg,rgba(15,29,41,.96),rgba(8,18,27,.96));border:1px solid rgba(120,215,255,.16);border-radius:18px;padding:17px;box-shadow:0 16px 40px rgba(0,0,0,.15);position:relative;overflow:hidden}.card:before{content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--orange));opacity:.55}
+.hero{margin-top:20px;padding:24px;border-radius:22px;border:1px solid rgba(91,225,255,.2);background:
+linear-gradient(120deg,rgba(9,23,34,.96),rgba(9,23,34,.78)),
+radial-gradient(circle at 82% 22%,rgba(68,231,255,.33),transparent 24%),
+radial-gradient(circle at 72% 90%,rgba(255,123,216,.15),transparent 24%);min-height:220px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.hero h2{font-size:29px;margin:15px 0 4px}.triptag,.pill,.badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:5px 9px;font-size:10px;background:rgba(255,255,255,.025)}
+.triptag{color:var(--green);border-color:rgba(103,255,177,.28);background:linear-gradient(90deg,rgba(103,255,177,.08),rgba(68,231,255,.05))}
+.stats,.grid4,.grid3,.grid2{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr);margin-top:24px}
+.stat b{display:block;font-size:21px}.stat span{font-size:10px;color:var(--muted)}.grid4{grid-template-columns:repeat(4,1fr)}.grid3{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:repeat(2,1fr)}
+.big{font-size:22px;font-weight:950}.cyan{color:var(--cyan);text-shadow:0 0 18px rgba(68,231,255,.16)}.green{color:var(--green);text-shadow:0 0 18px rgba(103,255,177,.13)}.violet{color:var(--violet);text-shadow:0 0 18px rgba(202,140,255,.13)}.orange{color:var(--orange);text-shadow:0 0 18px rgba(255,182,95,.13)}.red{color:var(--red)}
+.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.field,.booking-form input,.booking-form select,.booking-form textarea,.mobility-form input,.mobility-form select,.mobility-form textarea{background:#09111a;border:1px solid var(--border);border-radius:10px;color:white;padding:10px}
+.field label{display:block;font-size:9px;color:var(--muted);margin-bottom:4px}.field input,.field select,.field textarea{width:100%;background:transparent;border:0;outline:0;color:white}.field select option,.booking-form select option,.mobility-form select option{background:#111923}
+.booking-form,.mobility-form{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.booking-form textarea,.mobility-form textarea{grid-column:1/-1;min-height:72px}
+.timeline,.booking-list{display:grid;gap:10px}.empty{padding:34px 18px;border:1px dashed var(--border);border-radius:14px;color:var(--muted);text-align:center}
+.tripday{background:linear-gradient(145deg,var(--panel),#091018);border:1px solid var(--border);border-radius:16px;padding:16px}.tripday-top{display:flex;justify-content:space-between;gap:10px}
+.tripday-date{font-size:11px;color:var(--cyan);font-weight:900}.tripday h3{margin:4px 0 0;font-size:18px}.schedule{display:grid;gap:7px;margin-top:12px}
+.slot{display:grid;grid-template-columns:65px 25px 1fr auto;gap:7px;align-items:center;padding:9px;background:#0d1720;border:1px solid rgba(120,205,255,.08);border-radius:10px}
+.slot time{font-size:11px;font-weight:800}.src{font-size:9px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:3px 5px}.src.real{color:var(--green);border-color:rgba(92,255,157,.3)}
+.move{display:grid;grid-template-columns:28px 1fr;gap:8px;margin:1px 0 5px 72px;padding:7px 9px;border-left:2px solid rgba(53,231,255,.32);color:#a9bbc9;font-size:11px}.move b{color:#e5f3fc}
+.daytools{display:flex;gap:6px;margin-top:9px}.statusbox{margin-bottom:12px}.statusrow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.status{border:1px solid var(--border);border-radius:999px;padding:4px 7px;font-size:9px}.status.ok{color:var(--green);border-color:rgba(92,255,157,.3)}.status.warn{color:var(--orange);border-color:rgba(255,180,92,.3)}.status.live{color:var(--cyan);border-color:rgba(53,231,255,.3)}
+.info-card h3{margin:0 0 5px}.fact{padding:8px 0;border-bottom:1px solid rgba(120,205,255,.08)}.fact:last-child{border:0}.fact b{color:#dfeef7}
+.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.links a{color:var(--cyan);text-decoration:none;border:1px solid var(--border);border-radius:9px;padding:7px 9px}
+.alertitem{padding:8px 10px;border-radius:10px;background:#0d1720;border:1px solid var(--border);margin-top:6px}.alertitem.red{border-color:rgba(255,101,119,.35)}.alertitem.yellow{border-color:rgba(255,180,92,.35)}.alertitem.ok{border-color:rgba(92,255,157,.3)}
+.progress{height:7px;border-radius:99px;background:#17222c;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));width:0}
+.booking-item{padding:13px;background:var(--panel);border:1px solid var(--border);border-radius:13px}.booking-top{display:flex;justify-content:space-between;gap:10px}.meta{font-size:11px;color:var(--muted);margin-top:4px}
+.small{font-size:11px}
+.ai-panel{margin:0 0 14px}.ai-panel textarea{width:100%;min-height:88px;resize:vertical;background:#09111a;border:1px solid var(--border);border-radius:11px;color:white;padding:11px;outline:0}.ai-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.ai-draft{margin-top:12px;white-space:pre-wrap}.ai-config{display:none;margin-top:10px}.ai-config input{width:100%;margin-top:5px;background:#09111a;border:1px solid var(--border);border-radius:10px;color:white;padding:10px;outline:0}
+@media(max-width:950px){
+  .app{grid-template-columns:1fr}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}.nav{display:flex;overflow:auto}.nav button{min-width:max-content}
+  .grid4,.stats{grid-template-columns:repeat(2,1fr)}.grid3,.grid2,.formgrid,.booking-form,.mobility-form{grid-template-columns:1fr}.booking-form textarea,.mobility-form textarea{grid-column:auto}
+  main{padding:18px 12px}.move{margin-left:0}.slot{grid-template-columns:55px 22px 1fr}.src{grid-column:3}.top,.sectionhead{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:620px){
+  body{font-size:14px}.brand{font-size:18px}aside{padding:14px 10px 10px}.sub{margin:3px 2px 10px}.nav{gap:6px;padding-bottom:2px}.nav button{padding:9px 10px;font-size:12px;border-color:rgba(120,215,255,.1);background:rgba(255,255,255,.018)}
+  main{padding:14px 10px 36px}.top,.sectionhead{gap:9px}.actions{width:100%}.actions .btn{flex:1;min-width:0;padding:10px 7px;font-size:12px}.hero{margin-top:12px;padding:17px;min-height:auto}.hero h2{font-size:24px}.stats{gap:7px;margin-top:17px}.stat{padding:2px}.stat b{font-size:18px}.card{border-radius:14px;padding:14px}.sectionhead{margin:16px 0 9px}.sectionhead h2{font-size:19px}.formgrid{gap:8px}.field,.booking-form input,.booking-form select,.booking-form textarea,.mobility-form input,.mobility-form select,.mobility-form textarea,.ai-panel textarea{font-size:16px}.tripday{padding:12px;border-radius:13px}.tripday h3{font-size:17px}.tripday-top{align-items:flex-start}.schedule{gap:6px;margin-top:9px}.slot{grid-template-columns:48px 22px minmax(0,1fr);gap:5px;padding:8px;font-size:12px}.slot .src{grid-column:3;justify-self:start;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.daytools .btn{padding:8px 10px;font-size:12px}.grid4,.grid3,.grid2{gap:8px}.ai-actions{gap:7px}.ai-actions .btn{flex:1;min-width:130px}.booking-top{align-items:flex-start}.booking-item{padding:11px}.links a{padding:7px;font-size:12px}.big{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="brand">DaFragu <span>Travel Studio</span></div>
+  <div class="sub">PLAN • TRAVEL • REMEMBER</div>
+  <div class="nav">
+    <button class="active" data-page="home">🌍 Overview</button>
+    <button data-page="planner">✨ Crea viaggio</button>
+    <button data-page="itinerary">🗓️ Programma giorno per giorno</button>
+    <button data-page="searchhub">🔎 Cerca & Confronta</button>
+    <button data-page="experiences">🎟️ Esperienze</button>
+    <button data-page="destination">🧭 Info Destinazione</button>
+    <button data-page="mobility">🚇 Mobilità</button>
+    <button data-page="documents">🛂 Documenti & Visti</button>
+    <button data-page="insurance">🛡️ Assicurazione</button>
+    <button data-page="bookings">📚 Prenotazioni</button>
+    <button data-page="budget">💶 Budget & Spese</button>
+    <button data-page="checklist">✅ Checklist</button>
+    <button data-page="memories">📸 Diario & Memories</button>
+  </div>
+  <div class="credit">Created by Del Cielo D.</div>
+</aside>
+
+<main>
+
+<section id="home" class="section active">
+  <div class="top">
+    <div><div class="eyebrow">YOUR TRAVEL SPACE</div><h1>Il viaggio prende forma qui 🌴</h1><div class="muted">Organizza tutto senza perdere il gusto del viaggio: idee, tappe, documenti e prenotazioni.</div></div>
+    <div class="actions"><button class="btn" onclick="exportData()">Backup JSON</button><button class="btn" onclick="printTripPDF()">🖨️ Esporta PDF</button><button class="btn primary" onclick="go('planner')">＋ Nuovo viaggio</button></div>
+  </div>
+  <div class="hero">
+    <span class="triptag">✈️ VIAGGIO ATTIVO</span>
+    <h2 id="heroTitle">Nuovo viaggio</h2>
+    <div id="heroRoute" class="muted">Destinazione da definire</div>
+    <div class="stats">
+      <div class="stat"><b id="days">—</b><span>GIORNI</span></div>
+      <div class="stat"><b id="people">2</b><span>VIAGGIATORI</span></div>
+      <div class="stat"><b id="budget">€ —</b><span>BUDGET</span></div>
+      <div class="stat"><b id="spent">€ 0</b><span>SPESO</span></div>
+    </div>
+  </div>
+  <div class="sectionhead"><div><div class="eyebrow">TRAVEL READINESS</div><h2>Controllo viaggio</h2></div><button class="btn" onclick="runTravelCheck()">🔍 Controlla viaggio</button></div>
+  <div class="grid4">
+    <div class="card"><div class="big cyan" id="readyPct">0%</div><div class="muted">Preparazione</div><div class="progress" style="margin-top:9px"><i id="readyBar"></i></div></div>
+    <div class="card"><div class="big green" id="flightCount">0</div><div class="muted">Voli registrati</div></div>
+    <div class="card"><div class="big violet" id="hotelCount">0</div><div class="muted">Hotel registrati</div></div>
+    <div class="card"><div class="big orange" id="remaining">€ —</div><div class="muted">Budget residuo</div></div>
+  </div>
+  <div id="alertList" style="margin-top:12px"></div>
+</section>
+
+<section id="planner" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">LET'S GO</div><h2>Crea il viaggio</h2></div><button class="btn primary" onclick="saveTrip()">Salva progetto</button></div>
+  <div class="formgrid">
+    <div class="field"><label>NOME VIAGGIO</label><input id="name" placeholder="es. Cambogia Capodanno"></div>
+    <div class="field"><label>DESTINAZIONE</label><input id="destination" placeholder="es. Cambogia oppure Tokyo"></div>
+    <div class="field"><label>VIAGGIATORI</label><input id="travellers" type="number" value="2"></div>
+    <div class="field"><label>PARTENZA</label><input id="start" type="date"></div>
+    <div class="field"><label>RIENTRO</label><input id="end" type="date"></div>
+    <div class="field"><label>BUDGET TOTALE €</label><input id="budgetInput" type="number"></div>
+    <div class="field"><label>AEROPORTI DI PARTENZA</label><input id="airports" placeholder="GOA, MXP, BGY"></div>
+    <div class="field"><label>RITMO</label><select id="pace"><option>Medio</option><option>Tranquillo</option><option>Intenso</option></select></div>
+    <div class="field"><label>HOTEL</label><select id="hotelClass"><option>4 stelle</option><option>3 stelle</option><option>5 stelle</option><option>Indifferente</option></select></div>
+    <div class="field" style="grid-column:1/-1"><label>TAPPE/CITTÀ MANUALI — FACOLTATIVE</label><input id="stopsInput" placeholder="es. Phnom Penh, Siem Reap, Koh Rong. Se vuoto userò la destinazione principale."></div>
+  </div>
+  <div class="card" style="margin-top:12px"><b>Nota</b><div class="muted" style="margin-top:5px">Questa versione ignora automaticamente vecchi placeholder tipo “Prima tappa”, “Seconda tappa”, “Tappa finale”.</div></div>
+</section>
+
+<section id="itinerary" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">DAY BY DAY</div><h2>Programma giorno per giorno</h2><div class="muted">Città reali → luoghi reali → spostamenti → prenotazioni.</div></div><button class="btn primary" onclick="generateProgram()">✨ Genera programma base</button></div>
+  <div class="card ai-panel"><div class="eyebrow">TRAVEL AI · SU RICHIESTA</div><h3 style="margin:5px 0">Chiedi all’AI di costruire o migliorare il viaggio</h3><div class="muted small">Usa i dati del progetto e le tue preferenze. Il risultato resta una bozza: orari, disponibilità, prezzi e requisiti vanno verificati prima di prenotare.</div><textarea id="aiRequest" placeholder="Esempio: Per questo viaggio voglio 3 notti a Kuala Lumpur, poi 5 giorni di mare. Ritmo tranquillo, niente spostamenti lunghi e una sera speciale per noi."></textarea><div class="ai-actions"><button class="btn primary" onclick="askTravelAI()">✦ Crea bozza con AI</button><button class="btn" onclick="toggleAIConfig()">⚙ Collega AI</button><button class="btn" id="applyAIBtn" style="display:none" onclick="applyAIDraft()">✓ Usa questa bozza</button></div><div id="aiConfig" class="ai-config"><label class="small muted">INDIRIZZO DEL WORKER CLOUDFARE (la chiave OpenAI non va inserita qui)</label><input id="aiEndpoint" type="url" placeholder="https://travel-ai.tuo-account.workers.dev"><div class="ai-actions"><button class="btn" onclick="saveAIConfig()">Salva collegamento</button></div></div><div id="aiStatus" class="ai-draft small"></div></div>
+  <div id="programStatus" class="card statusbox" style="display:none"></div>
+  <div id="dayByDayList" class="timeline"></div>
+</section>
+
+<section id="searchhub" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">TRAVEL SEARCH</div><h2>Cerca & Confronta</h2></div></div>
+  <div class="grid4">
+    <div class="card"><b>✈️ Momondo</b><div class="muted">Voli</div><div class="links"><a target="_blank" href="https://www.momondo.it/">Apri ↗</a></div></div>
+    <div class="card"><b>✈️ Skyscanner</b><div class="muted">Voli</div><div class="links"><a target="_blank" href="https://www.skyscanner.it/">Apri ↗</a></div></div>
+    <div class="card"><b>✈️ Trip.com</b><div class="muted">Voli</div><div class="links"><a target="_blank" href="https://it.trip.com/">Apri ↗</a></div></div>
+    <div class="card"><b>✈️ lastminute.com</b><div class="muted">Voli</div><div class="links"><a target="_blank" href="https://www.it.lastminute.com/">Apri ↗</a></div></div>
+    <div class="card"><b>🏨 Booking.com</b><div class="muted">Hotel</div><div class="links"><a target="_blank" href="https://www.booking.com/">Apri ↗</a></div></div>
+    <div class="card"><b>🚗 DiscoverCars</b><div class="muted">Auto</div><div class="links"><a target="_blank" href="https://www.discovercars.com/it">Apri ↗</a></div></div>
+    <div class="card"><b>🎟️ GetYourGuide</b><div class="muted">Esperienze</div><div class="links"><a target="_blank" href="https://www.getyourguide.it/">Apri ↗</a></div></div>
+    <div class="card"><b>🎫 Booking Attractions</b><div class="muted">Esperienze</div><div class="links"><a target="_blank" href="https://www.booking.com/attractions/">Apri ↗</a></div></div>
+  </div>
+</section>
+
+<section id="experiences" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">FUN & EXPERIENCES</div><h2>Esperienze</h2></div><button class="btn primary" onclick="addExperience()">＋ Aggiungi</button></div>
+  <div id="experienceList" class="booking-list"></div>
+</section>
+
+<section id="destination" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">DESTINATION KIT</div><h2>Info Destinazione</h2><div class="muted">Dati automatici + fonti ufficiali per approfondire.</div></div><button class="btn primary" onclick="loadDestinationInfo()">🌍 Carica info</button></div>
+  <div id="destinationStatus" class="card statusbox"><b>Inserisci prima una destinazione.</b></div>
+  <div id="destinationGrid" class="grid2"></div>
+</section>
+
+<section id="mobility" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">MOVE SMART</div><h2>Mobilità</h2><div class="muted">Indicazioni generali + suggerimenti tra le visite.</div></div><button class="btn primary" onclick="saveMobility()">Salva note</button></div>
+  <div class="grid3">
+    <div class="card"><h3>🚶 A piedi</h3><div class="muted">Fino a ~1,2 km Travel Studio consiglia normalmente di camminare.</div></div>
+    <div class="card"><h3>🚇 Trasporto pubblico</h3><div class="muted">Per distanze urbane maggiori viene suggerito il mezzo pubblico. Linea e fermata esatte richiedono dati live della città.</div></div>
+    <div class="card"><h3>🚕 Taxi / ride hailing</h3><div class="muted">Per tratte lunghe o scomode valuta taxi, Grab, DiDi, Uber o equivalenti locali.</div></div>
+  </div>
+  <div class="sectionhead"><div><h2>Pagamenti e accesso</h2></div></div>
+  <div class="mobility-form">
+    <select id="mobContactless"><option value="">Contactless: da verificare</option><option value="yes">Contactless diretto</option><option value="partial">Contactless parziale</option><option value="no">No contactless</option></select>
+    <input id="mobCard" placeholder="Travel card / tessera locale">
+    <input id="mobApp" placeholder="App trasporto">
+    <input id="mobRide" placeholder="Taxi / ride hailing">
+    <input id="mobMetro" placeholder="Metro: note">
+    <input id="mobBus" placeholder="Bus: note">
+    <textarea id="mobNotes" placeholder="QR, pagamenti, app obbligatorie, ecc."></textarea>
+  </div>
+  <div id="mobilitySummary" style="margin-top:12px"></div>
+</section>
+
+<section id="documents" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">TRAVEL DOCS</div><h2>Documenti & Visti</h2></div></div>
+  <div class="card"><b>➕ Registra documento</b><div class="booking-form" style="margin-top:10px">
+    <select id="docType"><option>Passaporto</option><option>ESTA</option><option>eTA</option><option>eVisa</option><option>Visto</option><option>Patente internazionale</option><option>Altro</option></select>
+    <input id="docCountry" placeholder="Paese">
+    <input id="docNumber" placeholder="Numero / riferimento">
+    <input id="docPassport" placeholder="Passaporto associato">
+    <input id="docIssue" type="date"><input id="docExpiry" type="date">
+    <input id="docOfficial" placeholder="Sito governativo ufficiale">
+    <button class="btn primary" onclick="addDocument()">Salva</button>
+  </div></div>
+  <div id="documentList" style="margin-top:12px"></div>
+</section>
+
+<section id="insurance" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">TRAVEL SAFE</div><h2>Assicurazione viaggio</h2></div></div>
+  <div class="card"><b>➕ Registra polizza</b><div class="booking-form" style="margin-top:10px">
+    <input id="insCompany" value="Europ Assistance" placeholder="Compagnia"><input id="insPolicy" placeholder="Numero polizza">
+    <input id="insStart" type="date"><input id="insEnd" type="date"><input id="insDest" placeholder="Destinazioni / Mondo"><input id="insPeople" placeholder="Assicurati">
+    <input id="insMedical" type="number" placeholder="Massimale medico €"><input id="insEmergency" placeholder="Numero emergenza">
+    <select id="insCancel"><option value="yes">Annullamento sì</option><option value="no">Annullamento no</option></select>
+    <select id="insBag"><option value="yes">Bagaglio sì</option><option value="no">Bagaglio no</option></select>
+    <select id="insRepat"><option value="yes">Rimpatrio sì</option><option value="no">Rimpatrio no</option></select>
+    <button class="btn primary" onclick="addInsurance()">Salva polizza</button>
+  </div></div>
+  <div id="insuranceList" class="booking-list" style="margin-top:12px"></div>
+</section>
+
+<section id="bookings" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">MY BOOKINGS</div><h2>Prenotazioni</h2></div></div>
+  <div class="card"><b>➕ Aggiungi prenotazione</b><div class="booking-form" style="margin-top:10px">
+    <select id="bkType"><option value="flight">✈️ Volo</option><option value="hotel">🏨 Hotel</option><option value="car">🚗 Auto</option><option value="experience">🎟️ Esperienza</option></select>
+    <input id="bkTitle" placeholder="Titolo / tratta / hotel"><input id="bkProvider" placeholder="Provider"><input id="bkPrice" type="number" step="0.01" placeholder="Prezzo €">
+    <input id="bkStartDate" type="date"><input id="bkStartTime" type="time"><input id="bkEndDate" type="date"><input id="bkEndTime" type="time">
+    <input id="bkCode" placeholder="Codice / PNR"><input id="bkPlace" placeholder="Luogo"><input id="bkPaidBy" placeholder="Pagato da"><button class="btn primary" onclick="addBooking()">Salva</button>
+    <textarea id="bkNotes" placeholder="Note"></textarea>
+  </div></div>
+  <div id="bookingList" class="booking-list" style="margin-top:12px"></div>
+</section>
+
+<section id="budget" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">TRAVEL BUDGET</div><h2>Budget & Spese</h2></div></div>
+  <div class="grid3">
+    <div class="card"><div class="big" id="budgetTotal">€ —</div><div class="muted">Budget</div></div>
+    <div class="card"><div class="big red" id="budgetSpent">€ 0</div><div class="muted">Prenotato/speso</div></div>
+    <div class="card"><div class="big green" id="budgetLeft">€ —</div><div class="muted">Residuo</div></div>
+  </div>
+</section>
+
+<section id="checklist" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">READY? LET'S GO</div><h2>Checklist</h2></div><button class="btn" onclick="runTravelCheck()">Aggiorna</button></div>
+  <div id="checklistList"></div>
+</section>
+
+<section id="memories" class="section">
+  <div class="sectionhead"><div><div class="eyebrow">MEMORIES</div><h2>Diario & Memories</h2></div></div>
+  <div class="empty">Modulo pronto per foto, diario giornaliero, luoghi preferiti e statistiche finali.</div>
+</section>
+
+</main>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let state=JSON.parse(localStorage.getItem('dafraguTravel')||'{}');
+state.bookings=state.bookings||[]; state.documents=state.documents||[]; state.insurances=state.insurances||[];
+state.experiences=state.experiences||[]; state.mobility=state.mobility||{}; state.program=state.program||[];
+state.aiEndpoint=state.aiEndpoint||''; state.aiDraft=null;
+const save=()=>localStorage.setItem('dafraguTravel',JSON.stringify(state));
+const money=n=>'€ '+(+n||0).toLocaleString('it-IT',{maximumFractionDigits:2});
+function go(id){$$('.section').forEach(x=>x.classList.toggle('active',x.id===id));$$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+$$('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function daysBetween(a,b){if(!a||!b)return 0;return Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/86400000)+1}
+function isGenericStop(s){return !s||/^(prima|seconda|terza|quarta|quinta|ultima|finale)?\s*tappa(\s*(finale|\d+))?$/i.test(s.trim())||/^tappa\s*(finale|\d+)$/i.test(s.trim())}
+function currentStops(){return (state.stops||[]).filter(x=>x&&!isGenericStop(x))}
+function fmtDate(iso){if(!iso)return '—';return new Intl.DateTimeFormat('it-IT',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(new Date(iso+'T12:00'))}
+function saveTrip(){
+  state.name=$('#name').value.trim()||$('#destination').value.trim()||'Nuovo viaggio';
+  state.destination=$('#destination').value.trim(); state.travellers=+$('#travellers').value||2;
+  state.start=$('#start').value; state.end=$('#end').value; state.budget=+$('#budgetInput').value||0;
+  state.airports=$('#airports').value.trim(); state.pace=$('#pace').value; state.hotelClass=$('#hotelClass').value;
+  state.stops=$('#stopsInput').value.split(',').map(x=>x.trim()).filter(Boolean).filter(x=>!isGenericStop(x));
+  save(); render(); go('home');
+}
+function fillPlanner(){
+  $('#name').value=state.name||''; $('#destination').value=state.destination||''; $('#travellers').value=state.travellers||2;
+  $('#start').value=state.start||''; $('#end').value=state.end||''; $('#budgetInput').value=state.budget||'';
+  $('#airports').value=state.airports||''; $('#pace').value=state.pace||'Medio'; $('#hotelClass').value=state.hotelClass||'4 stelle';
+  $('#stopsInput').value=currentStops().join(', ');
+}
+function render(){
+  fillPlanner();
+  $('#heroTitle').textContent=state.name||'Nuovo viaggio';
+  $('#heroRoute').textContent=(state.destination||'Destinazione da definire')+(state.start?' • '+state.start+' → '+state.end:'');
+  $('#days').textContent=daysBetween(state.start,state.end)||'—'; $('#people').textContent=state.travellers||2;
+  $('#budget').textContent=state.budget?money(state.budget):'€ —';
+  const spent=state.bookings.reduce((a,b)=>a+(+b.price||0),0);
+  $('#spent').textContent=money(spent); $('#remaining').textContent=state.budget?money(state.budget-spent):'€ —';
+  $('#flightCount').textContent=state.bookings.filter(x=>x.type==='flight').length;
+  $('#hotelCount').textContent=state.bookings.filter(x=>x.type==='hotel').length;
+  $('#budgetTotal').textContent=state.budget?money(state.budget):'€ —'; $('#budgetSpent').textContent=money(spent); $('#budgetLeft').textContent=state.budget?money(state.budget-spent):'€ —';
+  renderProgram(); renderExperiences(); renderBookings(); renderDocuments(); renderInsurances(); renderMobility(); runTravelCheck();
+}
+function exportData(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='DaFragu_Travel_Studio_backup.json';a.click();
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function printTripPDF(){
+  if(!state.name&&!state.destination){alert('Inserisci e salva prima i dati del viaggio.');go('planner');return}
+  const total=daysBetween(state.start,state.end), spent=state.bookings.reduce((a,b)=>a+(+b.price||0),0);
+  const list=(items,html)=>items?.length?'<ul>'+items.map(html).join('')+'</ul>':'<p class="empty">Nessun dato inserito.</p>';
+  const program=state.program?.length?state.program.map((d,i)=>`<article class="day"><div class="dayhead"><b>GIORNO ${i+1} · ${esc(fmtDate(d.date).toUpperCase())}</b><strong>${esc(d.place)}</strong></div>${list(d.slots,s=>`<li><span class="time">${esc(s.time||'—')}</span><span>${esc(s.icon||'📍')} ${esc(s.text)}</span><em>${esc(s.source||'PROPOSTA')}</em></li>`)}</article>`).join(''):'<p class="empty">Programma non ancora generato.</p>';
+  const bookingType={flight:'✈️ Volo',hotel:'🏨 Hotel',car:'🚗 Auto',experience:'🎟️ Esperienza'};
+  const bookings=list(state.bookings,b=>`<li><b>${esc(bookingType[b.type]||'📌 Prenotazione')} · ${esc(b.title)}</b><br><small>${esc(b.provider||'')}${b.startDate?' · '+esc(b.startDate):''}${b.startTime?' '+esc(b.startTime):''}${b.code?' · Codice: '+esc(b.code):''}${b.price?' · '+esc(money(b.price)):''}</small>${b.notes?'<br><small>'+esc(b.notes)+'</small>':''}</li>`);
+  const docs=list(state.documents,d=>`<li><b>🪪 ${esc(d.type||'Documento')}</b><br><small>${esc(d.country||'')}${d.number?' · N° '+esc(d.number):''}${d.expiry?' · Scadenza '+esc(d.expiry):''}</small></li>`);
+  const experiences=list(state.experiences,x=>`<li>🎟️ <b>${esc(x.name)}</b>${x.provider?' · '+esc(x.provider):''}</li>`);
+  const insurance=list(state.insurances,x=>`<li><b>🛡️ ${esc(x.company||'Assicurazione')}</b><br><small>${esc(x.policy||'')}${x.start?' · '+esc(x.start):''}${x.end?' → '+esc(x.end):''}${x.medical?' · Copertura medica '+esc(money(x.medical)):''}</small></li>`);
+  const mob=state.mobility||{}, mobility=Object.values(mob).some(Boolean)?`<ul>${Object.entries(mob).filter(([,v])=>v).map(([k,v])=>`<li><b>${esc({contactless:'Contactless',card:'Tessera',app:'App',ride:'Ride hailing',metro:'Metro',bus:'Bus',notes:'Note'}[k]||k)}:</b> ${esc(v)}</li>`).join('')}</ul>`:'<p class="empty">Nessuna nota mobilità inserita.</p>';
+  const html=`<!doctype html><html lang="it"><head><meta charset="utf-8"><title>${esc(state.name||state.destination)} · DaFragu Travel Studio</title><style>body{font:14px Arial,sans-serif;color:#17212b;max-width:900px;margin:0 auto;padding:32px}h1{font-size:28px;margin:0 0 6px}h2{font-size:18px;border-bottom:2px solid #0aa6bb;padding-bottom:6px;margin:28px 0 10px}.meta{color:#52616d}.hero{background:#effbfc;border-left:5px solid #08aabd;padding:18px;margin:18px 0}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.box{background:#f3f5f6;border-radius:8px;padding:10px}.box b{display:block;font-size:17px}.day{break-inside:avoid;border:1px solid #dbe3e7;border-radius:9px;margin:10px 0;overflow:hidden}.dayhead{background:#eaf7f9;padding:10px;display:flex;justify-content:space-between;gap:10px}.day ul{margin:0;padding:4px 12px}.day li{list-style:none;padding:8px 0;border-bottom:1px solid #edf0f2;display:grid;grid-template-columns:70px 1fr auto;gap:8px}.day li:last-child{border:0}.time{font-weight:bold}em{font-size:10px;color:#586974;font-style:normal}ul{padding-left:18px}li{margin:7px 0}.empty{color:#697882;font-style:italic}footer{margin-top:28px;padding-top:10px;border-top:1px solid #dbe3e7;color:#697882;font-size:11px}@media print{body{padding:0}.no-print{display:none}}</style></head><body><div class="no-print" style="text-align:right"><button onclick="print()">Stampa / Salva PDF</button></div><h1>${esc(state.name||state.destination)}</h1><div class="meta">DaFragu Travel Studio · Documento di viaggio · generato il ${esc(new Date().toLocaleDateString('it-IT'))}</div><div class="hero"><b>${esc(state.destination||'Destinazione da definire')}</b><br>${state.start?esc(fmtDate(state.start))+' → '+esc(fmtDate(state.end)):''}</div><div class="grid"><div class="box"><b>${total||'—'}</b>giorni</div><div class="box"><b>${esc(state.travellers||2)}</b>viaggiatori</div><div class="box"><b>${esc(state.budget?money(state.budget):'—')}</b>budget</div><div class="box"><b>${esc(money(spent))}</b>prenotato</div></div><h2>Programma giorno per giorno</h2>${program}<h2>Prenotazioni</h2>${bookings}<h2>Esperienze</h2>${experiences}<h2>Documenti</h2>${docs}<h2>Assicurazione</h2>${insurance}<h2>Mobilità</h2>${mobility}<footer>Creato con DaFragu Travel Studio · Verifica sempre orari, disponibilità, prezzi e requisiti prima di prenotare.</footer></body></html>`;
+  const w=window.open('','_blank'); if(!w){alert('Il browser ha bloccato la finestra di stampa. Consenti i popup e riprova.');return} w.document.write(html);w.document.close();setTimeout(()=>w.print(),350);
+}
+
+/* -------- live destination data -------- */
+async function restCountry(dest){
+  const url='https://restcountries.com/v3.1/name/'+encodeURIComponent(dest)+'?fullText=false';
+  const r=await fetch(url); if(!r.ok)throw new Error('Paese non trovato'); const d=await r.json(); return d[0];
+}
+async function loadDestinationInfo(){
+  const dest=state.destination||$('#destination').value.trim();
+  if(!dest){$('#destinationStatus').innerHTML='<b class="red">Inserisci prima una destinazione nel Trip Planner.</b>';return}
+  $('#destinationStatus').innerHTML='<b>🌍 Sto caricando informazioni reali su '+dest+'…</b><div class="muted">Fonte dati generali: REST Countries. Visto e sicurezza restano da verificare su fonti ufficiali.</div>';
+  try{
+    const c=await restCountry(dest);
+    const curr=Object.entries(c.currencies||{}).map(([k,v])=>`${k} — ${v.name}${v.symbol?' ('+v.symbol+')':''}`).join(', ')||'—';
+    const langs=Object.values(c.languages||{}).join(', ')||'—';
+    const capital=(c.capital||[]).join(', ')||'—';
+    const tz=(c.timezones||[]).join(', ');
+    const drive=c.car?.side==='left'?'sinistra':'destra';
+    const calling=(c.idd?.root||'')+(c.idd?.suffixes?.[0]||'');
+    state.destinationFacts={name:c.name?.common||dest,official:c.name?.official||'',capital,currency:curr,languages:langs,region:c.region||'',subregion:c.subregion||'',timezone:tz,drive,calling,flag:c.flag||'',cca2:c.cca2||''};
+    save();
+    $('#destinationStatus').innerHTML=`<b>${c.flag||'🌍'} ${c.name?.common||dest}</b><div class="statusrow"><span class="status ok">DATI GENERALI CARICATI</span><span class="status warn">VISTO/SICUREZZA DA VERIFICARE SU FONTE UFFICIALE</span></div>`;
+    $('#destinationGrid').innerHTML=`
+      <div class="card info-card"><h3>🛂 Ingresso, passaporto e visto</h3>
+        <div class="fact"><b>Paese:</b> ${c.name?.official||c.name?.common||dest}</div>
+        <div class="fact"><b>Stato requisito visto:</b> da verificare su Viaggiare Sicuri / sito governativo del Paese.</div>
+        <div class="links"><a target="_blank" href="https://www.viaggiaresicuri.it/">Viaggiare Sicuri ↗</a><a target="_blank" href="https://www.esteri.it/it/servizi-consolari-e-visti/">MAECI – Visti ↗</a></div>
+      </div>
+      <div class="card info-card"><h3>🛡️ Sicurezza & geopolitica</h3>
+        <div class="fact"><b>Regione:</b> ${c.region||'—'} ${c.subregion?'· '+c.subregion:''}</div>
+        <div class="fact"><b>Situazione aggiornata:</b> apri sempre la scheda ufficiale del Paese.</div>
+        <div class="links"><a target="_blank" href="https://www.viaggiaresicuri.it/">Apri Viaggiare Sicuri ↗</a></div>
+      </div>
+      <div class="card info-card"><h3>💱 Valuta</h3><div class="fact"><b>${curr}</b></div><div class="muted small">Cambio live non ancora collegato in questa versione.</div></div>
+      <div class="card info-card"><h3>🏛️ Capitale & lingua</h3><div class="fact"><b>Capitale:</b> ${capital}</div><div class="fact"><b>Lingue:</b> ${langs}</div></div>
+      <div class="card info-card"><h3>🕒 Fuso & telefono</h3><div class="fact"><b>Fusi:</b> ${tz||'—'}</div><div class="fact"><b>Prefisso:</b> ${calling||'—'}</div></div>
+      <div class="card info-card"><h3>🚗 Guida</h3><div class="fact"><b>Si guida a:</b> ${drive}</div><div class="muted small">Patente internazionale e regole locali vanno verificate sulla fonte ufficiale.</div></div>
+      <div class="card info-card"><h3>📱 eSIM</h3><div class="fact"><b>Provider abituale:</b> Quibity</div><div class="links"><a target="_blank" href="https://quibity.com/it">Apri Quibity ↗</a></div></div>
+      <div class="card info-card"><h3>📲 App utili</h3><div class="fact">Travel Studio le aggiungerà quando collegheremo il profilo mobilità specifico della città.</div></div>
+    `;
+  }catch(e){
+    const destName=dest;
+    $('#destinationStatus').innerHTML='<b class="orange">Scheda base creata per '+destName+'</b><div class="muted">Il browser non ha consentito il caricamento automatico dei dati generali. I link ufficiali restano disponibili.</div>';
+    $('#destinationGrid').innerHTML=`
+      <div class="card info-card"><h3>🛂 Ingresso, passaporto e visto</h3><div class="fact"><b>Requisiti:</b> da verificare sulla scheda ufficiale del Paese.</div><div class="links"><a target="_blank" href="https://www.viaggiaresicuri.it/">Viaggiare Sicuri ↗</a><a target="_blank" href="https://www.esteri.it/it/servizi-consolari-e-visti/">MAECI – Visti ↗</a></div></div>
+      <div class="card info-card"><h3>🛡️ Sicurezza & geopolitica</h3><div class="fact">Controlla gli avvisi aggiornati prima della partenza.</div><div class="links"><a target="_blank" href="https://www.viaggiaresicuri.it/">Fonte ufficiale ↗</a></div></div>
+      <div class="card info-card"><h3>📱 eSIM</h3><div class="fact"><b>Provider abituale:</b> Quibity</div><div class="links"><a target="_blank" href="https://quibity.com/it">Apri Quibity ↗</a></div></div>
+      <div class="card info-card"><h3>🚇 Mobilità</h3><div class="fact">Vai alla sezione Mobilità per registrare contactless, app, tessere e ride hailing.</div></div>`;
+  }
+}
+
+/* -------- POI ENGINE: local fallback + live enrichment -------- */
+const LOCAL_POI = {
+  "phnom penh":[
+    "Palazzo Reale di Phnom Penh","Pagoda d’Argento","Museo Nazionale della Cambogia",
+    "Wat Phnom","Mercato Centrale (Phsar Thmei)","Wat Ounalom","Riverside / Sisowath Quay",
+    "Tuol Sleng Genocide Museum","Choeung Ek Killing Fields","Mercato Russo (Tuol Tom Poung)"
+  ],
+  "siem reap":[
+    "Angkor Wat","Angkor Thom","Bayon","Ta Prohm","Banteay Kdei","Pre Rup",
+    "Preah Khan","Banteay Srei","Pub Street","Old Market (Psar Chas)","Artisans Angkor",
+    "Phnom Bakheng"
+  ],
+  "koh rong":[
+    "Long Set Beach","Sok San Beach","Koh Touch","Police Beach","Long Beach",
+    "Bioluminescent Plankton Tour"
+  ],
+  "cambogia":[
+    "Palazzo Reale di Phnom Penh","Museo Nazionale della Cambogia","Wat Phnom",
+    "Tuol Sleng Genocide Museum","Angkor Wat","Bayon","Ta Prohm","Angkor Thom"
+  ],
+  "riyadh":[
+    "Al Masmak Palace","National Museum of Saudi Arabia","Diriyah / At-Turaif",
+    "Kingdom Centre Sky Bridge","Boulevard Riyadh City","Wadi Hanifah"
+  ],
+  "jeddah":[
+    "Al-Balad","Nassif House Museum","Jeddah Corniche","King Fahd's Fountain",
+    "Al Rahma Mosque","Red Sea Mall"
+  ],
+  "kuala lumpur":[
+    "Petronas Twin Towers","KLCC Park","Batu Caves","Merdeka Square",
+    "Central Market","Jalan Alor","Thean Hou Temple","KL Tower"
+  ],
+  "bali":[
+    "Uluwatu Temple","Tanah Lot","Tegallalang Rice Terrace","Ubud Palace",
+    "Sacred Monkey Forest Sanctuary","Tirta Empul","Campuhan Ridge Walk"
+  ]
+};
+const LOCAL_COORDS = {
+  "Palazzo Reale di Phnom Penh":[11.5639,104.9314],
+  "Pagoda d’Argento":[11.5627,104.9316],
+  "Museo Nazionale della Cambogia":[11.5651,104.9291],
+  "Wat Phnom":[11.5762,104.9230],
+  "Mercato Centrale (Phsar Thmei)":[11.5696,104.9210],
+  "Wat Ounalom":[11.5680,104.9298],
+  "Riverside / Sisowath Quay":[11.5689,104.9305],
+  "Tuol Sleng Genocide Museum":[11.5495,104.9172],
+  "Choeung Ek Killing Fields":[11.4842,104.9014],
+  "Mercato Russo (Tuol Tom Poung)":[11.5405,104.9140],
+  "Angkor Wat":[13.4125,103.8670],
+  "Angkor Thom":[13.4410,103.8593],
+  "Bayon":[13.4414,103.8593],
+  "Ta Prohm":[13.4348,103.8890],
+  "Banteay Kdei":[13.4300,103.8987],
+  "Pre Rup":[13.4349,103.9212],
+  "Preah Khan":[13.4618,103.8722],
+  "Banteay Srei":[13.5989,103.9631],
+  "Pub Street":[13.3530,103.8545],
+  "Old Market (Psar Chas)":[13.3532,103.8551],
+  "Artisans Angkor":[13.3524,103.8504],
+  "Phnom Bakheng":[13.4239,103.8567]
+};
+function normalizePlace(s){return (s||'').trim().toLowerCase()}
+async function geocode(place){
+  const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(place),{headers:{Accept:'application/json'}});
+  if(!r.ok)throw new Error('Geocodifica non disponibile'); const a=await r.json(); if(!a.length)throw new Error('Località non trovata: '+place);
+  return {lat:+a[0].lat,lon:+a[0].lon,label:a[0].display_name};
+}
+async function wikiNearby(lat,lon,limit=20){
+  const u='https://it.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord='+lat+'|'+lon+'&gsradius=10000&gslimit='+limit+'&format=json&origin=*';
+  const r=await fetch(u); if(!r.ok)throw new Error('Wikipedia non disponibile'); const d=await r.json(); return d.query?.geosearch||[];
+}
+function badPoi(title){return /^(lista|categoria|quartiere|comune|provincia|stazione|aeroporto|strada|via |piazza )/i.test(title||'')}
+function localPoi(place){
+  const key=normalizePlace(place);
+  let names=LOCAL_POI[key]||[];
+  if(!names.length){
+    // if a country is entered, try destination-wide seeds
+    names=LOCAL_POI[normalizePlace(state.destination)]||[];
+  }
+  return names.map(name=>{
+    const c=LOCAL_COORDS[name];
+    return {name,lat:c?c[0]:null,lon:c?c[1]:null,source:'LOCAL'};
+  });
+}
+async function poiForPlace(place){
+  state.poiCache=state.poiCache||{};
+  const key=normalizePlace(place);
+  const local=localPoi(place);
+  // Always have an offline result when curated data is available
+  let live=[];
+  try{
+    const g=await geocode(place);
+    const w=await wikiNearby(g.lat,g.lon,30);
+    live=w.filter(x=>!badPoi(x.title)).map(x=>({name:x.title,lat:x.lat,lon:x.lon,distance:x.dist,source:'Wikipedia'})).slice(0,18);
+  }catch(e){
+    live=[];
+  }
+  const seen=new Set(), merged=[];
+  [...local,...live].forEach(x=>{
+    const k=x.name.toLowerCase();
+    if(!seen.has(k)){seen.add(k);merged.push(x)}
+  });
+  if(!merged.length){
+    // Never return an empty itinerary: meaningful fallback categories
+    return [
+      {name:'Centro storico / area centrale di '+place,lat:null,lon:null,source:'FALLBACK'},
+      {name:'Mercato o quartiere locale di '+place,lat:null,lon:null,source:'FALLBACK'},
+      {name:'Museo o sito culturale principale di '+place,lat:null,lon:null,source:'FALLBACK'},
+      {name:'Punto panoramico / passeggiata principale di '+place,lat:null,lon:null,source:'FALLBACK'}
+    ];
+  }
+  state.poiCache[key]=merged; save(); return merged;
+}
+function placesForDays(total){
+  let s=currentStops();
+  if(!s.length){
+    const d=normalizePlace(state.destination);
+    if(d==='cambogia') s=['Phnom Penh','Siem Reap'];
+    else s=[state.destination];
+  }
+  return Array.from({length:total},(_,i)=>s[Math.min(s.length-1,Math.floor(i*s.length/total))]);
+}
+function haversine(a,b){
+  if(!a||!b||a.lat==null||b.lat==null)return null; const R=6371,r=x=>x*Math.PI/180;
+  const dLat=r(b.lat-a.lat),dLon=r(b.lon-a.lon),q=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(q));
+}
+function moveAdvice(km){
+  if(km==null)return {icon:'🧭',label:'Spostamento',text:'mezzo da definire'};
+  if(km<=1.2)return {icon:'🚶',label:'A piedi',text:`circa ${Math.max(100,Math.round(km*1000/50)*50)} m`};
+  if(km<=4.5)return {icon:'🚇',label:'Mezzo pubblico consigliato',text:`circa ${km.toFixed(1)} km · linea/fermata da verificare live`};
+  return {icon:'🚕',label:'Taxi / ride hailing o metro',text:`circa ${km.toFixed(1)} km`};
+}
+function toggleAIConfig(){
+  const el=$('#aiConfig'); el.style.display=el.style.display==='block'?'none':'block';
+  $('#aiEndpoint').value=state.aiEndpoint||'';
+}
+function saveAIConfig(){
+  state.aiEndpoint=$('#aiEndpoint').value.trim().replace(/\/$/,''); save();
+  $('#aiStatus').innerHTML=state.aiEndpoint?'<span class="green">✓ Collegamento AI salvato sul dispositivo.</span>':'<span class="orange">Inserisci l’indirizzo del Worker.</span>';
+}
+function travelAIContext(){
+  return {trip:{name:state.name||'',destination:state.destination||'',start:state.start||'',end:state.end||'',travellers:state.travellers||2,budget:state.budget||0,airports:state.airports||'',pace:state.pace||'Medio',hotelClass:state.hotelClass||'',stops:currentStops()},bookings:state.bookings.map(({type,title,provider,startDate,startTime})=>({type,title,provider,startDate,startTime}))};
+}
+function normalizeAIDraft(raw){
+  if(!raw||!Array.isArray(raw.program)||!raw.program.length)throw new Error('La risposta AI non contiene un programma utilizzabile.');
+  return {summary:String(raw.summary||'Bozza AI pronta.'),program:raw.program.map(d=>({date:String(d.date||''),place:String(d.place||state.destination||'Tappa'),slots:(d.slots||[]).map(s=>({time:String(s.time||'—'),icon:String(s.icon||'📍'),text:String(s.text||''),source:String(s.source||'PROPOSTA AI'),real:false}))})).filter(d=>d.date&&d.slots.length)};
+}
+async function askTravelAI(){
+  const status=$('#aiStatus'), request=$('#aiRequest').value.trim();
+  if(!state.destination||!state.start||!state.end){status.innerHTML='<span class="orange">Prima salva destinazione e date nel Trip Planner.</span>';go('planner');return}
+  if(!state.aiEndpoint){status.innerHTML='<span class="orange">Prima collega il Worker AI. La chiave OpenAI resta protetta nel Worker.</span>';$('#aiConfig').style.display='block';return}
+  status.innerHTML='<b>✦ Sto preparando la bozza…</b><div class="muted">L’AI sta lavorando sui dati del tuo progetto.</div>';
+  try{
+    const r=await fetch(state.aiEndpoint+'/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({request,context:travelAIContext()})});
+    const body=await r.json().catch(()=>null); if(!r.ok)throw new Error(body?.error||'Il servizio AI non ha risposto correttamente.');
+    state.aiDraft=normalizeAIDraft(body); $('#applyAIBtn').style.display='inline-block';
+    status.innerHTML='<b class="green">✓ Bozza AI pronta</b><div class="muted">'+state.aiDraft.summary.replace(/[<>]/g,'')+'</div><div class="muted small" style="margin-top:7px">Controlla sempre aperture, tempi, prezzi, visto e disponibilità prima di prenotare.</div>';
+  }catch(e){status.innerHTML='<b class="red">AI non disponibile</b><div class="muted">'+String(e.message||e).replace(/[<>]/g,'')+'</div>'}
+}
+function applyAIDraft(){
+  if(!state.aiDraft)return; state.program=state.aiDraft.program; syncBookingsToProgram(); save(); renderProgram();
+  $('#aiStatus').innerHTML='<b class="green">✓ Bozza AI inserita nel programma</b><div class="muted">Ora puoi aggiungere o modificare attività manualmente.</div>';
+}
+async function generateProgram(){
+  if(!state.start||!state.end||!state.destination){
+    alert('Prima salva destinazione e date nel Trip Planner.'); go('planner'); return;
+  }
+  const total=daysBetween(state.start,state.end);
+  if(total<1){alert('Date non valide');return}
+  const status=$('#programStatus');
+  status.style.display='block';
+  status.innerHTML='<b>🔎 Sto costruendo il programma…</b><div class="muted">Uso dati locali affidabili e provo anche ad arricchirli online.</div>';
+
+  const places=placesForDays(total), unique=[...new Set(places)], poi={};
+  for(let i=0;i<unique.length;i++){
+    status.innerHTML=`<b>🔎 ${unique[i]}</b><div class="muted">Preparazione tappa ${i+1}/${unique.length}…</div>`;
+    poi[unique[i]]=await poiForPlace(unique[i]);
+  }
+
+  const start=new Date(state.start+'T12:00'), counters={}; state.program=[];
+  for(let i=0;i<total;i++){
+    const d=new Date(start); d.setDate(start.getDate()+i);
+    const iso=d.toISOString().slice(0,10), place=places[i], list=poi[place]||[];
+    let idx=counters[place]||0, slots=[];
+
+    if(i===0){
+      slots.push({time:'—',icon:'✈️',text:'Partenza / trasferimento verso '+place,source:'DA CONFERMARE'});
+      slots.push({time:'—',icon:'🏨',text:'Arrivo e check-in',source:'DA CONFERMARE'});
+      if(list[idx]){
+        const p=list[idx++]; slots.push({time:'17:30',icon:'📍',text:p.name,source:p.source==='Wikipedia'?'WIKI LIVE':'LOCALE',real:true,lat:p.lat,lon:p.lon});
+      }
+      slots.push({time:'20:00',icon:'🍽️',text:'Cena in zona centrale',source:'PROPOSTA'});
+    } else if(i===total-1){
+      if(list[idx]){
+        const p=list[idx++]; slots.push({time:'09:00',icon:'📍',text:p.name,source:p.source==='Wikipedia'?'WIKI LIVE':'LOCALE',real:true,lat:p.lat,lon:p.lon});
+      }
+      slots.push({time:'—',icon:'🧳',text:'Check-out e trasferimento aeroporto/stazione',source:'DA CONFERMARE'});
+      slots.push({time:'—',icon:'✈️',text:'Rientro',source:'DA CONFERMARE'});
+    } else {
+      const times=['09:00','11:30','15:00'];
+      for(let j=0;j<3;j++){
+        if(list[idx]){
+          const p=list[idx++];
+          slots.push({time:times[j],icon:j===0?'🏛️':j===1?'📍':'🧭',text:p.name,source:p.source==='Wikipedia'?'WIKI LIVE':p.source==='LOCAL'?'LOCALE':'PROPOSTA',real:true,lat:p.lat,lon:p.lon});
+        }
+      }
+      slots.splice(Math.min(2,slots.length),0,{time:'13:00',icon:'🍜',text:'Pranzo in zona',source:'PROPOSTA'});
+      slots.push({time:'19:30',icon:'🍽️',text:'Cena / serata libera',source:'PROPOSTA'});
+    }
+    counters[place]=idx;
+    state.program.push({date:iso,place,slots});
+  }
+  syncBookingsToProgram(); save(); renderProgram();
+  status.style.display='block';
+  status.innerHTML=`<b class="green">✓ Programma creato</b><div class="muted">${total} giorni · ${unique.join(' → ')}</div>`;
+}
+function syncBookingsToProgram(){
+  state.program.forEach(d=>d.slots=(d.slots||[]).filter(x=>x.source!=='PRENOTATO'));
+  state.bookings.forEach(b=>{
+    if(!b.startDate)return;
+    const day=state.program.find(x=>x.date===b.startDate);
+    if(!day)return;
+    day.slots.push({time:b.startTime||'—',icon:b.type==='flight'?'✈️':b.type==='hotel'?'🏨':b.type==='car'?'🚗':'🎟️',text:b.title+(b.provider?' · '+b.provider:''),source:'PRENOTATO'});
+  });
+}
+function renderProgram(){
+  const el=$('#dayByDayList');
+  if(!state.program.length){el.innerHTML='<div class="empty">Nessun programma generato.</div>';return}
+  el.innerHTML=state.program.map((d,i)=>{
+    let blocks='',last=null;
+    (d.slots||[]).forEach(s=>{
+      if(s.real&&last){
+        const a=moveAdvice(haversine(last,s));
+        blocks+=`<div class="move"><span>${a.icon}</span><span><b>${a.label}</b> · ${a.text}</span></div>`;
+      }
+      blocks+=`<div class="slot"><time>${s.time}</time><span>${s.icon}</span><span>${s.text}</span><span class="src ${s.real?'real':''}">${s.source}</span></div>`;
+      if(s.real)last=s;
+    });
+    return `<div class="tripday"><div class="tripday-top"><div><div class="tripday-date">GIORNO ${i+1} · ${fmtDate(d.date).toUpperCase()}</div><h3>${d.place}</h3></div><span class="pill">${i===0?'PARTENZA':i===state.program.length-1?'RIENTRO':'IN VIAGGIO'}</span></div><div class="schedule">${blocks}</div><div class="daytools"><button class="btn" onclick="addManualActivity(${i})">＋ Attività</button></div></div>`;
+  }).join('');
+}
+function addManualActivity(i){
+  const t=prompt('Attività?'); if(!t)return;
+  const time=prompt('Orario?','Da definire')||'Da definire';
+  state.program[i].slots.push({time,icon:'📌',text:t,source:'TUO'});save();renderProgram()
+}
+
+/* -------- bookings / docs / insurance -------- */
+function addBooking(){
+  const title=$('#bkTitle').value.trim(); if(!title)return alert('Inserisci un titolo.');
+  state.bookings.push({type:$('#bkType').value,title,provider:$('#bkProvider').value.trim(),price:+$('#bkPrice').value||0,startDate:$('#bkStartDate').value,startTime:$('#bkStartTime').value,endDate:$('#bkEndDate').value,endTime:$('#bkEndTime').value,code:$('#bkCode').value.trim(),place:$('#bkPlace').value.trim(),paidBy:$('#bkPaidBy').value.trim(),notes:$('#bkNotes').value.trim()});
+  save(); syncBookingsToProgram(); render();
+}
+function removeBooking(i){state.bookings.splice(i,1);save();syncBookingsToProgram();render()}
+function renderBookings(){
+  const el=$('#bookingList'); if(!state.bookings.length){el.innerHTML='<div class="empty">Nessuna prenotazione registrata.</div>';return}
+  el.innerHTML=state.bookings.map((x,i)=>`<div class="booking-item"><div class="booking-top"><div><b>${x.type==='flight'?'✈️':x.type==='hotel'?'🏨':x.type==='car'?'🚗':'🎟️'} ${x.title}</b><div class="meta">${x.provider||'provider non indicato'} · ${x.startDate||'data da indicare'} ${x.startTime||''}${x.price?' · '+money(x.price):''}</div></div><button class="btn danger" onclick="removeBooking(${i})">×</button></div></div>`).join('');
+}
+function addExperience(){const n=prompt('Nome esperienza?');if(!n)return;const p=prompt('Provider?','GetYourGuide')||'';state.experiences.push({name:n,provider:p});save();renderExperiences()}
+function renderExperiences(){const el=$('#experienceList');if(!state.experiences.length){el.innerHTML='<div class="empty">Nessuna esperienza salvata.</div>';return}el.innerHTML=state.experiences.map((x,i)=>`<div class="booking-item"><b>🎟️ ${x.name}</b><div class="meta">${x.provider||''}</div></div>`).join('')}
+function addDocument(){state.documents.push({type:$('#docType').value,country:$('#docCountry').value,number:$('#docNumber').value,passport:$('#docPassport').value,issue:$('#docIssue').value,expiry:$('#docExpiry').value,official:$('#docOfficial').value});save();renderDocuments();runTravelCheck()}
+function renderDocuments(){const el=$('#documentList');if(!state.documents.length){el.innerHTML='<div class="empty">Nessun documento registrato.</div>';return}el.innerHTML=state.documents.map((d,i)=>`<div class="booking-item"><b>🪪 ${d.type}</b><div class="meta">${d.country||''}${d.expiry?' · scadenza '+d.expiry:''}${d.number?' · '+d.number:''}</div></div>`).join('')}
+function addInsurance(){state.insurances.push({company:$('#insCompany').value,policy:$('#insPolicy').value,start:$('#insStart').value,end:$('#insEnd').value,dest:$('#insDest').value,people:$('#insPeople').value,medical:+$('#insMedical').value||0,emergency:$('#insEmergency').value,cancel:$('#insCancel').value,bag:$('#insBag').value,repat:$('#insRepat').value});save();renderInsurances();runTravelCheck()}
+function renderInsurances(){const el=$('#insuranceList');if(!state.insurances.length){el.innerHTML='<div class="empty">Nessuna polizza registrata.</div>';return}el.innerHTML=state.insurances.map(x=>`<div class="booking-item"><b>🛡️ ${x.company||'Assicurazione'}</b><div class="meta">${x.policy||''} · ${x.start||'—'} → ${x.end||'—'} · medico ${x.medical?money(x.medical):'—'}</div></div>`).join('')}
+
+/* -------- mobility -------- */
+function saveMobility(){state.mobility={contactless:$('#mobContactless').value,card:$('#mobCard').value,app:$('#mobApp').value,ride:$('#mobRide').value,metro:$('#mobMetro').value,bus:$('#mobBus').value,notes:$('#mobNotes').value};save();renderMobility()}
+function renderMobility(){const x=state.mobility||{};$('#mobContactless').value=x.contactless||'';$('#mobCard').value=x.card||'';$('#mobApp').value=x.app||'';$('#mobRide').value=x.ride||'';$('#mobMetro').value=x.metro||'';$('#mobBus').value=x.bus||'';$('#mobNotes').value=x.notes||'';const el=$('#mobilitySummary');if(!Object.values(x).some(Boolean)){el.innerHTML='<div class="empty">Nessuna nota mobilità salvata.</div>';return}el.innerHTML=`<div class="card"><b>Profilo mobilità</b><div class="meta">${x.contactless==='yes'?'✅ Contactless diretto':x.contactless==='partial'?'🟠 Contactless parziale':x.contactless==='no'?'❌ No contactless':'⚪ Da verificare'}${x.card?'<br>🎫 '+x.card:''}${x.app?'<br>📱 '+x.app:''}${x.ride?'<br>🚕 '+x.ride:''}${x.metro?'<br>🚇 '+x.metro:''}${x.bus?'<br>🚌 '+x.bus:''}${x.notes?'<br><br>'+x.notes:''}</div></div>`}
+
+/* -------- readiness -------- */
+function runTravelCheck(){
+  const end=state.end||'', start=state.start||'';
+  const passport=state.documents.some(d=>d.type==='Passaporto'&&(!d.expiry||!end||d.expiry>=end));
+  const insurance=state.insurances.some(x=>(!x.start||!start||x.start<=start)&&(!x.end||!end||x.end>=end));
+  const checks=[
+    {ok:passport,crit:true,text:'Passaporto valido registrato'},
+    {ok:insurance,crit:true,text:'Assicurazione che copre le date'},
+    {ok:state.bookings.some(x=>x.type==='flight'),crit:true,text:'Volo registrato'},
+    {ok:state.bookings.some(x=>x.type==='hotel'),crit:false,text:'Almeno un hotel registrato'},
+    {ok:state.program.length>0,crit:false,text:'Programma giorno per giorno generato'},
+    {ok:state.experiences.length>0||state.bookings.some(x=>x.type==='experience'),crit:false,text:'Esperienze presenti'}
+  ];
+  const pct=Math.round(checks.filter(x=>x.ok).length/checks.length*100);$('#readyPct').textContent=pct+'%';$('#readyBar').style.width=pct+'%';
+  $('#alertList').innerHTML=checks.map(x=>`<div class="alertitem ${x.ok?'ok':x.crit?'red':'yellow'}">${x.ok?'🟢':x.crit?'🔴':'🟠'} ${x.text}</div>`).join('');
+  $('#checklistList').innerHTML=$('#alertList').innerHTML;
+}
+render();
+</script>
+</body>
+</html>
