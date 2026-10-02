@@ -68,6 +68,7 @@ radial-gradient(circle at 72% 90%,rgba(255,123,216,.15),transparent 24%);min-hei
 .small{font-size:11px}
 .ai-panel{margin:0 0 14px}.ai-panel textarea{width:100%;min-height:88px;resize:vertical;background:#09111a;border:1px solid var(--border);border-radius:11px;color:white;padding:11px;outline:0}.ai-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.ai-draft{margin-top:12px;white-space:pre-wrap}.ai-config{display:none;margin-top:10px}.ai-config input{width:100%;margin-top:5px;background:#09111a;border:1px solid var(--border);border-radius:10px;color:white;padding:10px;outline:0}
 .cover-wrap{min-height:calc(100vh - 85px);display:grid;place-items:center;padding:28px 0}.cover-card{width:min(940px,100%);padding:clamp(26px,6vw,68px);border:1px solid rgba(103,255,177,.24);border-radius:28px;background:linear-gradient(130deg,rgba(7,19,29,.96),rgba(12,31,43,.86)),radial-gradient(circle at 85% 15%,rgba(68,231,255,.35),transparent 26%),radial-gradient(circle at 15% 90%,rgba(255,123,216,.20),transparent 27%);box-shadow:0 28px 90px rgba(0,0,0,.34);position:relative;overflow:hidden}.cover-card:after{content:'✦';position:absolute;right:8%;top:12%;font-size:100px;color:rgba(103,255,177,.12);text-shadow:0 0 35px rgba(68,231,255,.38)}.cover-logo{font-size:clamp(34px,7vw,66px);font-weight:950;line-height:.98;letter-spacing:-2px}.cover-logo span{display:block;background:linear-gradient(90deg,var(--cyan),var(--green),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.cover-copy{max-width:580px;font-size:16px;margin:18px 0 24px;color:#c2d7e4}.cover-meta{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.note-form{display:grid;grid-template-columns:160px 1fr auto;gap:8px}.note-form input,.note-form textarea{background:#09111a;border:1px solid var(--border);border-radius:10px;color:white;padding:10px;outline:0}.note-form textarea{min-height:78px;resize:vertical}.note-list{display:grid;gap:9px;margin-top:12px}.note-item{padding:13px;background:linear-gradient(145deg,#101d27,#09131c);border:1px solid var(--border);border-radius:13px}.note-top{display:flex;justify-content:space-between;gap:10px}.note-text{white-space:pre-wrap;margin-top:7px;color:#dcebf4}
+.on-cover .app{grid-template-columns:1fr}.on-cover aside{display:none}.on-cover main{max-width:1180px;padding:22px 28px}
 @media(max-width:950px){
   .app{grid-template-columns:1fr}aside{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--border)}.nav{display:flex;overflow:auto}.nav button{min-width:max-content}
   .grid4,.stats{grid-template-columns:repeat(2,1fr)}.grid3,.grid2,.formgrid,.booking-form,.mobility-form{grid-template-columns:1fr}.booking-form textarea,.mobility-form textarea{grid-column:auto}
@@ -80,7 +81,7 @@ radial-gradient(circle at 72% 90%,rgba(255,123,216,.15),transparent 24%);min-hei
 }
 </style>
 </head>
-<body>
+<body class="on-cover">
 <div class="app">
 <aside>
   <div class="brand">DaFragu <span>Travel Studio</span></div>
@@ -283,7 +284,7 @@ state.travelNotes=state.travelNotes||[];
 state.aiEndpoint=state.aiEndpoint||''; state.aiDraft=null;
 const save=()=>localStorage.setItem('dafraguTravel',JSON.stringify(state));
 const money=n=>'€ '+(+n||0).toLocaleString('it-IT',{maximumFractionDigits:2});
-function go(id){$$('.section').forEach(x=>x.classList.toggle('active',x.id===id));$$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+function go(id){document.body.classList.toggle('on-cover',id==='cover');$$('.section').forEach(x=>x.classList.toggle('active',x.id===id));$$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
 $$('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
 function daysBetween(a,b){if(!a||!b)return 0;return Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/86400000)+1}
 function isGenericStop(s){return !s||/^(prima|seconda|terza|quarta|quinta|ultima|finale)?\s*tappa(\s*(finale|\d+))?$/i.test(s.trim())||/^tappa\s*(finale|\d+)$/i.test(s.trim())}
